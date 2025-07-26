@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS:wght@700&display=swap');
+
+.app {
+  text-align: center;
+  font-family: 'Comic Sans MS', sans-serif;
+  padding: 2rem;
+  margin-top: 200px;
+}
+
+.gato-img {
+  width: 250px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.gato-img:active {
+  transform: scale(0.95);
+}
+
+.start-btn, .result-container button {
+  font-size: 1.2rem;
+  padding: 0.6rem 1.2rem;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+
+body {
+ 
+  background-image: url('./assets/fondo.jpg');
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gato-img {
+  width: 280px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-top: 1rem;
+}
+
+.mensaje-gato {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  color: #ff4090;
+  animation: pop 0.3s ease;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+button {
+ padding: 0.6em 1em;
+ border: 4px solid #92e94a;
+ transition: ease-in-out 0.3s;
+ background-color: transparent;
+ color: #92e94a;
+ font-weight: bolder;
+ font-size: 16px;
+}
+
+button:hover {
+ transform: scale(1.2) rotate(10deg);
+ background-color: #92e94a;
+ color: white;
+}
+
+.inicio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.gato-saludo {
+  width: 180px;
+  height: auto;
+}
+
+
+.result-container{
+  color: #92e94a;
+}
+.game-container{
+  color: #92e94a;
+}
+
+.gatos-finales {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
+.gato-aparece {
+  width: 100px;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: aparecer 0.5s ease forwards;
+}
+
+@keyframes aparecer {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.barra-tiempo-container {
+  width: 30%;
+  height: 15px;
+  background-color: #eee;
+  border-radius: 10px;
+  margin: 1rem auto;
+  overflow: hidden;
+}
+
+.barra-tiempo {
+  height: 100%;
+  transition: width 1s linear, background-color 0.3s ease;
+  border-radius: 10px;
+}
