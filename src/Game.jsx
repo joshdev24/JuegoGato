@@ -57,8 +57,8 @@ const [emocionIndex, setEmocionIndex] = useState(0);
   }}
   ></div>
 </div>
-      <motion.img
-  key={emocionIndex}
+  <motion.img
+  key={`gato-${emociones[emocionIndex]}`} // clave única basada en la ruta del gif
   src={emociones[emocionIndex]}
   alt="gato"
   className="gato-img"
@@ -66,6 +66,7 @@ const [emocionIndex, setEmocionIndex] = useState(0);
   animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
   transition={{ type: 'spring', stiffness: 300 }}
 />
+
       
     </div>
   );
