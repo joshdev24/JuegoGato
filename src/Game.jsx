@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import TimerBar from './TimerBar';
-import Stars from './Stars';
+import { useEffect, useRef, useState } from 'react';
 
 function Game({ score, setScore, endGame }) {
+  const [time, setTime] = useState(10);
+  const timerRef = useRef(null); // 🟡 Referencia persistente
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -19,12 +18,28 @@ function Game({ score, setScore, endGame }) {
   ];
 
   // Preload GIFs
-  useState(() => {
+  useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
       img.src = src;
     });
   }, []);
+
+  // ⏳ Temporizador persistente
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setTime(prev => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          endGame();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, [endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
@@ -35,24 +50,20 @@ function Game({ score, setScore, endGame }) {
 
   return (
     <div className="game-container">
-      <Stars />
+      <h2>Tiempo: {time}s</h2>
+      <h3>Ticks: {score}</h3>
 
       <TimerBar duration={10} onEnd={endGame} />
 
-      <h3>Ticks: {score}</h3>
-
-      <motion.img
-        key={emocionIndex}
+      <img
         src={`${emociones[emocionIndex]}?v=${Date.now()}`}
         alt="gato"
         className="gato-img"
         onClick={handleRascar}
-        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
+        style={{ transform: animarClick ? 'scale(0.9)' : 'scale(1)', transition: 'transform 0.2s ease' }}
       />
     </div>
   );
 }
 
 export default Game;
-
