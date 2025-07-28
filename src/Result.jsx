@@ -34,8 +34,8 @@ function Result({ score, onRestart }) {
 
   return (
     <div className="result-container">
-      <h2>¡Terminaste con {score} ticks!</h2>
-      <p>Tu récord: {record} ticks</p>
+      <h2>Hiciste {score} clicks!</h2>
+      <p>Tu récord: {record} clicks</p>
 
       <div className="gatos-finales">
         {gatos.map((src, i) => (

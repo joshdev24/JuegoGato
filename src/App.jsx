@@ -63,7 +63,7 @@ function App() {
           >
             <img src={gatoSaludando} alt="Gato saludando" className="gato-saludo" />
             <button className="button" onClick={startGame}>
-              ¡Empezar a rascar!
+              ¡Empezar a jugar!
             </button>
           </motion.div>
         )}
