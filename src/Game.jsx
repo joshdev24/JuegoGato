@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Stars from './Stars';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
@@ -18,15 +17,7 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // Precarga los GIFs
-  useEffect(() => {
-    emociones.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
-
-  // Timer
+  // ⏳ Timer: cuenta regresiva
   useEffect(() => {
     if (time <= 0) {
       endGame();
@@ -34,20 +25,27 @@ function Game({ score, setScore, endGame }) {
     }
     const timer = setInterval(() => setTime(t => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [time, endGame]);
+  }, [time]);
+
+  // ✅ Precarga los GIFs
+  useEffect(() => {
+    emociones.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
 
+    // Cambio inmediato de emoción al hacer clic
     setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
   return (
     <div className="game-container">
-      <Stars />
-
       <h2>Tiempo: {time}s</h2>
       <h3>Ticks: {score}</h3>
 
@@ -63,18 +61,17 @@ function Game({ score, setScore, endGame }) {
       </div>
 
       <motion.img
-        key={emocionIndex}
-        src={`${emociones[emocionIndex]}?v=${Date.now()}`}
-        alt="gato"
-        className="gato-img"
-        onClick={handleRascar}
-        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      />
+  key={emocionIndex}
+  src={`${emociones[emocionIndex]}?v=${Date.now()}`} 
+  alt="gato"
+  className="gato-img"
+  onClick={handleRascar}
+  animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+  transition={{ type: 'spring', stiffness: 300 }}
+/>
     </div>
   );
 }
 
 export default Game;
-
 

@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 
@@ -13,7 +12,7 @@ export default function Stars() {
     }, 500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, []); // solo al montar
 
-  return null; // No renderiza nada visible
+  return null;
 }
