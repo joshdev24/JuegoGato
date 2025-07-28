@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
 
@@ -6,6 +6,7 @@ function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
+  const raf = useRef(null);
 
   const emociones = [
     '/assets/gato_relajado.gif',
@@ -18,7 +19,22 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // Precarga los GIFs
+  // ⏱ Timer continuo
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          endGame();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [endGame]);
+
+  // ✅ Precarga de GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -26,31 +42,19 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // Timer que no se pausa ni reinicia al cambiar estado
-  useEffect(() => {
-    if (time <= 0) {
-      endGame();
-      return;
-    }
-    const timer = setInterval(() => {
-      setTime(t => {
-        if (t <= 1) {
-          clearInterval(timer);
-          endGame();
-          return 0;
-        }
-        return t - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [endGame]);
-
+  // 🎯 Click handler optimizado
   const handleRascar = () => {
+    // Evita que se solapen animaciones
+    if (raf.current) cancelAnimationFrame(raf.current);
+
     setScore(prev => prev + 1);
     setAnimarClick(true);
-    setTimeout(() => setAnimarClick(false), 150);
 
+    raf.current = requestAnimationFrame(() => {
+      setAnimarClick(false);
+    });
+
+    // Solo cambia el índice, no forzamos recarga con Date.now()
     setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
@@ -73,8 +77,7 @@ function Game({ score, setScore, endGame }) {
       </div>
 
       <motion.img
-        key={emocionIndex}
-        src={`${emociones[emocionIndex]}?v=${Date.now()}`}
+        src={emociones[emocionIndex]} // ❌ sin ?v=Date.now() para que no recargue
         alt="gato"
         className="gato-img"
         onClick={handleRascar}
@@ -86,4 +89,3 @@ function Game({ score, setScore, endGame }) {
 }
 
 export default Game;
-
