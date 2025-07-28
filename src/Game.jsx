@@ -61,14 +61,14 @@ function Game({ score, setScore, endGame }) {
       </div>
 
       <motion.img
-        key={emocionIndex}
-        src={emociones[emocionIndex]}
-        alt="gato"
-        className="gato-img"
-        onClick={handleRascar}
-        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      />
+  key={emocionIndex}
+  src={`${emociones[emocionIndex]}?v=${Date.now()}`} 
+  alt="gato"
+  className="gato-img"
+  onClick={handleRascar}
+  animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+  transition={{ type: 'spring', stiffness: 300 }}
+/>
     </div>
   );
 }
