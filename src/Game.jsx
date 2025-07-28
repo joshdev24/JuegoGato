@@ -26,15 +26,20 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // ⏱ Timer
   useEffect(() => {
-    if (time <= 0) {
-      endGame();
-      return;
-    }
-    const timer = setInterval(() => setTime(t => t - 1), 1000);
-    return () => clearInterval(timer);
-  }, [time, endGame]);
+  const timer = setInterval(() => {
+    setTime(prev => {
+      if (prev <= 1) {
+        clearInterval(timer);
+        endGame();
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(timer); // limpiar si el componente se desmonta
+}, []); // 👈 importante: sin dependencias
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
