@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
 
@@ -6,56 +6,53 @@ function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
-  const raf = useRef(null);
+  const videoRef = useRef(null);
 
   const emociones = [
-    '/assets/gato_relajado.gif',
-    '/assets/gato_feliz.gif',
-    '/assets/gato_enojado.gif',
-    '/assets/gato_burlon.gif',
-    '/assets/gato_dj.gif',
-    '/assets/gato_sorprendido.gif',
-    '/assets/gato_saludando.gif',
-    '/assets/gato_furioso.gif',
+    '/assets/gato_relajado.mp4',
+    '/assets/gato_feliz.mp4',
+    '/assets/gato_enojado.mp4',
+    '/assets/gato_burlon.mp4',
+    '/assets/gato_dj.mp4',
+    '/assets/gato_sorprendido.mp4',
+    '/assets/gato_saludando.mp4',
+    '/assets/gato_furioso.mp4',
   ];
 
-  // ⏱ Timer continuo
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          endGame();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [endGame]);
-
-  // ✅ Precarga de GIFs
+  // Precarga videos
   useEffect(() => {
     emociones.forEach(src => {
-      const img = new Image();
-      img.src = src;
+      const video = document.createElement('video');
+      video.src = src;
     });
   }, []);
 
-  // 🎯 Click handler optimizado
-  const handleRascar = () => {
-    // Evita que se solapen animaciones
-    if (raf.current) cancelAnimationFrame(raf.current);
+  // Timer
+  useEffect(() => {
+    if (time <= 0) {
+      endGame();
+      return;
+    }
+    const timer = setInterval(() => setTime(t => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [time, endGame]);
 
+  const handleRascar = () => {
     setScore(prev => prev + 1);
     setAnimarClick(true);
+    setTimeout(() => setAnimarClick(false), 150);
 
-    raf.current = requestAnimationFrame(() => {
-      setAnimarClick(false);
+    // Cambiar emoción y reiniciar video
+    setEmocionIndex(prev => {
+      const next = (prev + 1) % emociones.length;
+      return next;
     });
 
-    // Solo cambia el índice, no forzamos recarga con Date.now()
-    setEmocionIndex(prev => (prev + 1) % emociones.length);
+    // Reiniciar reproducción
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+    }
   };
 
   return (
@@ -76,11 +73,15 @@ function Game({ score, setScore, endGame }) {
         ></div>
       </div>
 
-      <motion.img
-        src={emociones[emocionIndex]} // ❌ sin ?v=Date.now() para que no recargue
-        alt="gato"
+      <motion.video
+        ref={videoRef}
+        src={emociones[emocionIndex]}
         className="gato-img"
         onClick={handleRascar}
+        autoPlay
+        muted
+        loop
+        playsInline
         animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
         transition={{ type: 'spring', stiffness: 300 }}
       />
