@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
+  const timeRef = useRef(10);          // guarda el tiempo restante real
+  const timerRef = useRef(null);       // referencia al interval
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -18,7 +20,7 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // ⏳ Precarga los GIFs
+  // Precarga GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -26,26 +28,26 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // ⏱ Timer - corre solo una vez, no depende de `time`
+  // Timer: se ejecuta una vez y usa refs para controlar tiempo
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(t => {
-        if (t <= 1) {
-          clearInterval(timer);
-          endGame();
-          return 0;
-        }
-        return t - 1;
-      });
+    timerRef.current = setInterval(() => {
+      if (timeRef.current <= 1) {
+        clearInterval(timerRef.current);
+        setTime(0);
+        endGame();
+      } else {
+        timeRef.current -= 1;
+        setTime(timeRef.current);
+      }
     }, 1000);
-    return () => clearInterval(timer);
+
+    return () => clearInterval(timerRef.current);
   }, [endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
-
     setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
@@ -62,10 +64,9 @@ function Game({ score, setScore, endGame }) {
             backgroundColor:
               time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
           }}
-        ></div>
+        />
       </div>
 
-      {/* Contenedor de los GIFs (todos en DOM, se ocultan con display) */}
       <div className="gato-wrapper" onClick={handleRascar}>
         {emociones.map((src, i) => (
           <motion.img
