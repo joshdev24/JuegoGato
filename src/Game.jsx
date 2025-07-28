@@ -1,13 +1,5 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import gatoRelajado from '../public/assets/gato_relajado.gif';
-import gatoFeliz from '../public/assets/gato_feliz.gif';
-import gatoSorprendido from '../public/assets/gato_sorprendido.gif';
-import gatoEnojado from '../public/assets/gato_enojado.gif';
-import gatoBurlon from '../public/assets/gato_burlon.gif';
-import gatoDj from '../public/assets/gato_dj.gif';
-import gatoSaludando from '../public/assets//gato_saludando.gif';
-import gatoFurioso from '../public/assets/gato_furioso.gif';
+import { motion } from 'framer-motion';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
@@ -15,43 +7,41 @@ function Game({ score, setScore, endGame }) {
   const [emocionIndex, setEmocionIndex] = useState(0);
 
   const emociones = [
-  'public/assets/gato_relajado.gif',
-  'public/assets/gato_feliz.gif',
-  'public/assets/gato_enojado.gif',
-  'public/assets/gato_burlon.gif',
-  'public/assets/gato_dj.gif',
-  'public/assets/gato_sorprendido.gif',
-  'public/assets/gato_saludando.gif',
-  'public/assets/gato_furioso.gif',
-];
+    '/assets/gato_relajado.gif',
+    '/assets/gato_feliz.gif',
+    '/assets/gato_enojado.gif',
+    '/assets/gato_burlon.gif',
+    '/assets/gato_dj.gif',
+    '/assets/gato_sorprendido.gif',
+    '/assets/gato_saludando.gif',
+    '/assets/gato_furioso.gif',
+  ];
 
-  // Preload GIFs
-  useEffect(() => {
-    emociones.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
-
-  // Temporizador
+  // ⏳ Timer: cuenta regresiva
   useEffect(() => {
     if (time <= 0) {
       endGame();
       return;
     }
-
-    const timer = setInterval(() => {
-      setTime((prevTime) => prevTime - 1);
-    }, 1000);
-
+    const timer = setInterval(() => setTime(t => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [time, endGame]);
+  }, [time]);
+
+  // ✅ Precarga los GIFs
+  useEffect(() => {
+    emociones.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   const handleRascar = () => {
-    setScore((prev) => prev + 1);
+    setScore(prev => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
-    setEmocionIndex((prev) => (prev + 1) % emociones.length);
+
+    // Cambio inmediato de emoción al hacer clic
+    setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
   return (
@@ -69,17 +59,19 @@ function Game({ score, setScore, endGame }) {
           }}
         ></div>
       </div>
-      <motion.img
-  src={emociones[emocionIndex]}
-  alt="gato"
-  className="gato-img"
-  onClick={handleRascar}
-  animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-  transition={{ type: 'spring', stiffness: 300 }}
-/>
 
+      <motion.img
+        key={emocionIndex}
+        src={emociones[emocionIndex]}
+        alt="gato"
+        className="gato-img"
+        onClick={handleRascar}
+        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+      />
     </div>
   );
 }
 
 export default Game;
+
