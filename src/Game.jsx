@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Stars from './Stars';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
-  const timerRef = useRef(null);
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -17,7 +18,7 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // Precarga de GIFs
+  // ⏳ Precarga los GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -25,67 +26,54 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // Temporizador persistente
+  // ⏱ Timer
   useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setTime(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          endGame();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timerRef.current);
-  }, [endGame]);
+    if (time <= 0) {
+      endGame();
+      return;
+    }
+    const timer = setInterval(() => setTime(t => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [time, endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
+
     setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
   return (
-    <div className="game-container" style={{ textAlign: 'center' }}>
+    <div className="game-container">
+      <Stars />
+      <h2>Tiempo: {time}s</h2>
       <h3>Ticks: {score}</h3>
-
-      <img
-        src={`${emociones[emocionIndex]}?v=${Date.now()}`}
-        alt="gato"
-        className="gato-img"
-        onClick={handleRascar}
-        style={{
-          cursor: 'pointer',
-          transform: animarClick ? 'scale(0.9)' : 'scale(1)',
-          transition: 'transform 0.2s ease',
-          maxWidth: '250px',
-          width: '100%',
-          margin: '0 auto',
-          display: 'block'
-        }}
-      />
-
-      {/* Barra de tiempo en div aparte y abajo */}
-      <div
-        className="barra-tiempo-container"
-      >
+      <div className="barra-tiempo-container">
         <div
           className="barra-tiempo"
           style={{
             width: `${(time / 10) * 100}%`,
-            height: '100%',
             backgroundColor:
               time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
-            transition: 'width 0.5s ease',
           }}
-        />
+        ></div>
       </div>
 
-      {/* Mostrar el tiempo numérico debajo (opcional) */}
-      <h2 style={{ marginTop: '10px' }}>Tiempo: {time}s</h2>
+      {/* Contenedor de los GIFs (todos en DOM, se ocultan con display) */}
+      <div className="gato-wrapper" onClick={handleRascar}>
+        {emociones.map((src, i) => (
+          <motion.img
+            key={i}
+            src={src}
+            alt={`gato-${i}`}
+            className="gato-img"
+            style={{ display: emocionIndex === i ? 'block' : 'none' }}
+            animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
