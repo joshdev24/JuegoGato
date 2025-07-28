@@ -24,6 +24,34 @@ function App() {
 
   return (
     <div className="app">
+    <div className="fondo-estrellado">
+  {[...Array(90)].map((_, i) => {
+    const left = Math.random() * 100;
+    const top = Math.random() * 100;
+    const delay = Math.random() * 5;
+    const size = Math.random() * 4 + 2; // de 2px a 6px
+    const colors = ['#ebc943ff', '#df5545ff', '#76f0f0ff', '#35da35ff', '#fdfd96', '#78b6ecff'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    return (
+      <div
+        key={i}
+        className="estrella"
+        style={{
+          left: `${left}%`,
+          top: `${top}%`,
+          width: `${size}px`,
+          height: `${size}px`,
+          backgroundColor: color,
+          boxShadow: `0 0 6px ${color}`,
+          animationDelay: `${delay}s`,
+        }}
+      />
+    );
+  })}
+</div>
+
+
       <AnimatePresence mode="wait">
         {!gameStarted && !finished && (
           <motion.div
@@ -69,6 +97,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      
     </div>
   );
 }

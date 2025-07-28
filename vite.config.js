@@ -7,26 +7,25 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Juego Gato Rascador',
-        short_name: 'Gato Rascador',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#ffffff',
-        description: 'Juego para rascar al gato y pasar el tiempo',
+        name: 'Juego del Gato Rascado',
+        short_name: 'RascaGato',
+        description: 'Un juego divertido para rascar al gato',
+        theme_color: '#ffffff',
         icons: [
           {
-            src: 'icon-192.png',
+            src: 'icon.png',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/png'
           },
           {
-            src: 'icon-512.png',
+            src: 'icon.png',
             sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
-    }),
-  ],
+            type: 'image/png'
+          }
+        ]
+      }
+    })
+  ]
 });
