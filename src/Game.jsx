@@ -15,15 +15,15 @@ function Game({ score, setScore, endGame }) {
   const [emocionIndex, setEmocionIndex] = useState(0);
 
   const emociones = [
-    gatoRelajado,
-    gatoFeliz,
-    gatoEnojado,
-    gatoBurlon,
-    gatoDj,
-    gatoSorprendido,
-    gatoSaludando,
-    gatoFurioso,
-  ];
+  'public/assets/gato_relajado.gif',
+  'public/assets/gato_feliz.gif',
+  'public/assets/gato_enojado.gif',
+  'public/assets/gato_burlon.gif',
+  'public/assets/gato_dj.gif',
+  'public/assets/gato_sorprendido.gif',
+  'public/assets/gato_saludando.gif',
+  'public/assets/gato_furioso.gif',
+];
 
   // Preload GIFs
   useEffect(() => {
@@ -69,15 +69,15 @@ function Game({ score, setScore, endGame }) {
           }}
         ></div>
       </div>
-
       <motion.img
-        src={emociones[emocionIndex]}
-        alt="gato"
-        className="gato-img"
-        onClick={handleRascar}
-        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      />
+  src={emociones[emocionIndex]}
+  alt="gato"
+  className="gato-img"
+  onClick={handleRascar}
+  animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+  transition={{ type: 'spring', stiffness: 300 }}
+/>
+
     </div>
   );
 }
