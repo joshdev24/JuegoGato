@@ -9,14 +9,16 @@
 
 
 .gato-img {
-  width: 250px;
-  cursor: pointer;
-  transition: transform 0.1s;
+  width: 250px;           /* tamaño ancho fijo o relativo */
+  height: auto;           /* mantiene proporción */
+  cursor: pointer;        /* cambia el cursor al pasar encima */
+  user-select: none;      /* evita selección accidental al clickear */
+  display: block;         /* quita espacio abajo */
+  margin: 20px auto;      /* centra horizontalmente y separa del contenido */
+  filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); /* sombra sutil para dar profundidad */
+  transition: transform 0.15s ease-in-out;       /* suaviza escalado */
 }
 
-.gato-img:active {
-  transform: scale(0.95);
-}
 
 .fondo-estrellado {
   position: fixed;
