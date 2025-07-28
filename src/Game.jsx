@@ -25,6 +25,14 @@ function Game({ score, setScore, endGame }) {
     gatoFurioso,
   ];
 
+  // ✅ Precargar GIFs al montar el componente
+  useEffect(() => {
+    emociones.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   // Temporizador
   useEffect(() => {
     if (time <= 0) {
@@ -43,7 +51,6 @@ function Game({ score, setScore, endGame }) {
     setScore((prev) => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
-    // Cambiar a la siguiente emoción
     setEmocionIndex((prev) => (prev + 1) % emociones.length);
   };
 
@@ -58,13 +65,13 @@ function Game({ score, setScore, endGame }) {
           style={{
             width: `${(time / 10) * 100}%`,
             backgroundColor:
-              time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336', // verde, amarillo, rojo
+              time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
           }}
         ></div>
       </div>
 
       <motion.img
-        key={`gato-${emociones[emocionIndex]}`} // fuerza el reinicio del gif al cambiar
+        key={`gato-${emocionIndex}`}
         src={emociones[emocionIndex]}
         alt="gato"
         className="gato-img"
