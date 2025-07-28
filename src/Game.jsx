@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import gatoRelajado from '../assets/gato_relajado.gif';
-import gatoFeliz from '../assets/gato_feliz.gif';
-import gatoSorprendido from '../assets/gato_sorprendido.gif';
-import gatoEnojado from '../assets/gato_enojado.gif';
-import gatoBurlon from '../assets/gato_burlon.gif';
-import gatoDj from '../assets/gato_dj.gif';
-import gatoSaludando from '../assets/gato_saludando.gif';
-import gatoFurioso from '../assets/gato_furioso.gif';
+import gatoRelajado from '../public/assets/gato_relajado.gif';
+import gatoFeliz from '../public/assets/gato_feliz.gif';
+import gatoSorprendido from '../public/assets/gato_sorprendido.gif';
+import gatoEnojado from '../public/assets/gato_enojado.gif';
+import gatoBurlon from '../public/assets/gato_burlon.gif';
+import gatoDj from '../public/assets/gato_dj.gif';
+import gatoSaludando from '../public/assets//gato_saludando.gif';
+import gatoFurioso from '../public/assets/gato_furioso.gif';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
