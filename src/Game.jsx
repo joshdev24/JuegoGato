@@ -71,16 +71,6 @@ function Game({ score, setScore, endGame }) {
       {/* Barra de tiempo en div aparte y abajo */}
       <div
         className="barra-tiempo-container"
-        style={{
-          marginTop: '20px',
-          width: '80%',
-          height: '20px',
-          backgroundColor: '#ddd',
-          borderRadius: '10px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          overflow: 'hidden',
-        }}
       >
         <div
           className="barra-tiempo"
