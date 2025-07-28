@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
 
@@ -6,28 +6,27 @@ function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
-  const videoRef = useRef(null);
 
   const emociones = [
-    '/assets/gato_relajado.mp4',
-    '/assets/gato_feliz.mp4',
-    '/assets/gato_enojado.mp4',
-    '/assets/gato_burlon.mp4',
-    '/assets/gato_dj.mp4',
-    '/assets/gato_sorprendido.mp4',
-    '/assets/gato_saludando.mp4',
-    '/assets/gato_furioso.mp4',
+    '/assets/gato_relajado.gif',
+    '/assets/gato_feliz.gif',
+    '/assets/gato_enojado.gif',
+    '/assets/gato_burlon.gif',
+    '/assets/gato_dj.gif',
+    '/assets/gato_sorprendido.gif',
+    '/assets/gato_saludando.gif',
+    '/assets/gato_furioso.gif',
   ];
 
-  // Precarga videos
+  // ⏳ Precarga los GIFs
   useEffect(() => {
     emociones.forEach(src => {
-      const video = document.createElement('video');
-      video.src = src;
+      const img = new Image();
+      img.src = src;
     });
   }, []);
 
-  // Timer
+  // ⏱ Timer
   useEffect(() => {
     if (time <= 0) {
       endGame();
@@ -42,21 +41,12 @@ function Game({ score, setScore, endGame }) {
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
 
-    // Cambiar emoción y reiniciar video
-    setEmocionIndex(prev => {
-      const next = (prev + 1) % emociones.length;
-      return next;
-    });
-
-    // Reiniciar reproducción
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-    }
+    setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
   return (
     <div className="game-container">
+      {/* Estrellas permanentes */}
       <Stars />
 
       <h2>Tiempo: {time}s</h2>
@@ -73,18 +63,20 @@ function Game({ score, setScore, endGame }) {
         ></div>
       </div>
 
-      <motion.video
-        ref={videoRef}
-        src={emociones[emocionIndex]}
-        className="gato-img"
-        onClick={handleRascar}
-        autoPlay
-        muted
-        loop
-        playsInline
-        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      />
+      {/* Contenedor de los GIFs (todos en DOM, se ocultan con display) */}
+      <div className="gato-wrapper" onClick={handleRascar}>
+        {emociones.map((src, i) => (
+          <motion.img
+            key={i}
+            src={src}
+            alt={`gato-${i}`}
+            className="gato-img"
+            style={{ display: emocionIndex === i ? 'block' : 'none' }}
+            animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
