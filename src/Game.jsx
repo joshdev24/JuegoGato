@@ -6,6 +6,7 @@ function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
   const timeRef = useRef(10);          // guarda el tiempo restante real
   const timerRef = useRef(null);       // referencia al interval
+  const endGameRef = useRef(endGame);  // guarda referencia a la función endGame
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -20,6 +21,11 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
+  // Actualiza la referencia si endGame cambia (pero no reinicia timer)
+  useEffect(() => {
+    endGameRef.current = endGame;
+  }, [endGame]);
+
   // Precarga GIFs
   useEffect(() => {
     emociones.forEach(src => {
@@ -28,13 +34,13 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // Timer: se ejecuta una vez y usa refs para controlar tiempo
+  // Timer que corre una sola vez
   useEffect(() => {
     timerRef.current = setInterval(() => {
       if (timeRef.current <= 1) {
         clearInterval(timerRef.current);
         setTime(0);
-        endGame();
+        endGameRef.current();
       } else {
         timeRef.current -= 1;
         setTime(timeRef.current);
@@ -42,7 +48,7 @@ function Game({ score, setScore, endGame }) {
     }, 1000);
 
     return () => clearInterval(timerRef.current);
-  }, [endGame]);
+  }, []);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
