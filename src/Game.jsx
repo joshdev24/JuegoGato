@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import TimerBar from './TimerBar';
+import Stars from './Stars';
 
 function Game({ score, setScore, endGame }) {
-  const [time, setTime] = useState(10);
-  const timerRef = useRef(null); // 🟡 Referencia persistente
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -18,28 +19,12 @@ function Game({ score, setScore, endGame }) {
   ];
 
   // Preload GIFs
-  useEffect(() => {
+  useState(() => {
     emociones.forEach(src => {
       const img = new Image();
       img.src = src;
     });
   }, []);
-
-  // ⏳ Temporizador persistente
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setTime(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          endGame();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timerRef.current);
-  }, [endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
@@ -50,30 +35,24 @@ function Game({ score, setScore, endGame }) {
 
   return (
     <div className="game-container">
-      <h2>Tiempo: {time}s</h2>
+      <Stars />
+
+      <TimerBar duration={10} onEnd={endGame} />
+
       <h3>Ticks: {score}</h3>
 
-      <div className="barra-tiempo-container">
-        <div
-          className="barra-tiempo"
-          style={{
-            width: `${(time / 10) * 100}%`,
-            backgroundColor:
-              time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
-            transition: 'width 0.5s ease'
-          }}
-        ></div>
-      </div>
-
-      <img
+      <motion.img
+        key={emocionIndex}
         src={`${emociones[emocionIndex]}?v=${Date.now()}`}
         alt="gato"
         className="gato-img"
         onClick={handleRascar}
-        style={{ transform: animarClick ? 'scale(0.9)' : 'scale(1)', transition: 'transform 0.2s ease' }}
+        animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
+        transition={{ type: 'spring', stiffness: 300 }}
       />
     </div>
   );
 }
 
 export default Game;
+
