@@ -7,14 +7,14 @@ function Game({ score, setScore, endGame }) {
   const [emocionIndex, setEmocionIndex] = useState(0);
 
   const emociones = [
-    '/assets/gato_relajado.gif',
-    '/assets/gato_feliz.gif',
-    '/assets/gato_enojado.gif',
-    '/assets/gato_burlon.gif',
-    '/assets/gato_dj.gif',
-    '/assets/gato_sorprendido.gif',
-    '/assets/gato_saludando.gif',
-    '/assets/gato_furioso.gif',
+    'public/assets/gato_relajado.gif',
+    'public/assets/gato_feliz.gif',
+    'public/assets/gato_enojado.gif',
+    'public/assets/gato_burlon.gif',
+    'public/assets/gato_dj.gif',
+    'public/assets/gato_sorprendido.gif',
+    'public/assets/gato_saludando.gif',
+    'public/assets/gato_furioso.gif',
   ];
 
   // ⏳ Timer: cuenta regresiva
