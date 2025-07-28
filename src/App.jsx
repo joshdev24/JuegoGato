@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Game from './Game.jsx';
 import Result from './Result.jsx';
@@ -17,40 +17,39 @@ function App() {
     setGameStarted(true);
   };
 
-  const endGame = () => {
+  const endGame = useCallback(() => {
     setFinished(true);
     setGameStarted(false);
-  };
+  }, []);
 
   return (
     <div className="app">
-    <div className="fondo-estrellado">
-  {[...Array(90)].map((_, i) => {
-    const left = Math.random() * 100;
-    const top = Math.random() * 100;
-    const delay = Math.random() * 5;
-    const size = Math.random() * 4 + 2; // de 2px a 6px
-    const colors = ['#ebc943ff', '#df5545ff', '#76f0f0ff', '#35da35ff', '#fdfd96', '#78b6ecff'];
-    const color = colors[Math.floor(Math.random() * colors.length)];
+      <div className="fondo-estrellado">
+        {[...Array(90)].map((_, i) => {
+          const left = Math.random() * 100;
+          const top = Math.random() * 100;
+          const delay = Math.random() * 5;
+          const size = Math.random() * 4 + 2; // de 2px a 6px
+          const colors = ['#ebc943ff', '#df5545ff', '#76f0f0ff', '#35da35ff', '#fdfd96', '#78b6ecff'];
+          const color = colors[Math.floor(Math.random() * colors.length)];
 
-    return (
-      <div
-        key={i}
-        className="estrella"
-        style={{
-          left: `${left}%`,
-          top: `${top}%`,
-          width: `${size}px`,
-          height: `${size}px`,
-          backgroundColor: color,
-          boxShadow: `0 0 6px ${color}`,
-          animationDelay: `${delay}s`,
-        }}
-      />
-    );
-  })}
-</div>
-
+          return (
+            <div
+              key={i}
+              className="estrella"
+              style={{
+                left: `${left}%`,
+                top: `${top}%`,
+                width: `${size}px`,
+                height: `${size}px`,
+                backgroundColor: color,
+                boxShadow: `0 0 6px ${color}`,
+                animationDelay: `${delay}s`,
+              }}
+            />
+          );
+        })}
+      </div>
 
       <AnimatePresence mode="wait">
         {!gameStarted && !finished && (
@@ -62,11 +61,7 @@ function App() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
           >
-            <img
-              src={gatoSaludando}
-              alt="Gato saludando"
-              className="gato-saludo"
-            />
+            <img src={gatoSaludando} alt="Gato saludando" className="gato-saludo" />
             <button className="button" onClick={startGame}>
               ¡Empezar a rascar!
             </button>
@@ -97,12 +92,12 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      
     </div>
   );
 }
 
 export default App;
+
 
 
 
