@@ -25,7 +25,7 @@ function Game({ score, setScore, endGame }) {
     gatoFurioso,
   ];
 
-  // ✅ Precargar GIFs al montar el componente
+  // Preload GIFs
   useEffect(() => {
     emociones.forEach((src) => {
       const img = new Image();
@@ -71,7 +71,6 @@ function Game({ score, setScore, endGame }) {
       </div>
 
       <motion.img
-        key={`gato-${emocionIndex}`}
         src={emociones[emocionIndex]}
         alt="gato"
         className="gato-img"
