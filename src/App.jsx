@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Game from './Game.jsx';
 import Result from './Result.jsx';
-import gatoSaludando from '../public/assets/gato_sorprendido.gif';
+import gatoSaludando from '../public/assets/gato_sorprendido.mp4"';
 import './style.css';
 
 function App() {
