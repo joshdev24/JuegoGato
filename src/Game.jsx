@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
-  const timerRef = useRef(null); // 🟡 Referencia persistente
+  const timerRef = useRef(null);
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -17,7 +17,7 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // Preload GIFs
+  // Precarga de GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -25,7 +25,7 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // ⏳ Temporizador persistente
+  // Temporizador persistente
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setTime(prev => {
@@ -49,19 +49,53 @@ function Game({ score, setScore, endGame }) {
   };
 
   return (
-    <div className="game-container">
-      <h2>Tiempo: {time}s</h2>
+    <div className="game-container" style={{ textAlign: 'center' }}>
       <h3>Ticks: {score}</h3>
-
-      <TimerBar duration={10} onEnd={endGame} />
 
       <img
         src={`${emociones[emocionIndex]}?v=${Date.now()}`}
         alt="gato"
         className="gato-img"
         onClick={handleRascar}
-        style={{ transform: animarClick ? 'scale(0.9)' : 'scale(1)', transition: 'transform 0.2s ease' }}
+        style={{
+          cursor: 'pointer',
+          transform: animarClick ? 'scale(0.9)' : 'scale(1)',
+          transition: 'transform 0.2s ease',
+          maxWidth: '250px',
+          width: '100%',
+          margin: '0 auto',
+          display: 'block'
+        }}
       />
+
+      {/* Barra de tiempo en div aparte y abajo */}
+      <div
+        className="barra-tiempo-container"
+        style={{
+          marginTop: '20px',
+          width: '80%',
+          height: '20px',
+          backgroundColor: '#ddd',
+          borderRadius: '10px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          className="barra-tiempo"
+          style={{
+            width: `${(time / 10) * 100}%`,
+            height: '100%',
+            backgroundColor:
+              time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
+            transition: 'width 0.5s ease',
+          }}
+        />
+      </div>
+
+      {/* Mostrar el tiempo numérico debajo (opcional) */}
+      <h2 style={{ marginTop: '10px' }}>Tiempo: {time}s</h2>
     </div>
   );
 }
