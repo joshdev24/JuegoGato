@@ -26,15 +26,20 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // ⏱ Timer
+  // ⏱ Timer - corre solo una vez, no depende de `time`
   useEffect(() => {
-    if (time <= 0) {
-      endGame();
-      return;
-    }
-    const timer = setInterval(() => setTime(t => t - 1), 1000);
+    const timer = setInterval(() => {
+      setTime(t => {
+        if (t <= 1) {
+          clearInterval(timer);
+          endGame();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
     return () => clearInterval(timer);
-  }, [time, endGame]);
+  }, [endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
