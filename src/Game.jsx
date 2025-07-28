@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Stars from './Stars';
+import { useEffect, useRef, useState } from 'react';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
+  const timerRef = useRef(null); // 🟡 Referencia persistente
   const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
 
@@ -18,7 +17,7 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // ⏳ Precarga los GIFs
+  // Preload GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -26,34 +25,31 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
+  // ⏳ Temporizador persistente
   useEffect(() => {
-  const timer = setInterval(() => {
-    setTime(prev => {
-      if (prev <= 1) {
-        clearInterval(timer);
-        endGame();
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
+    timerRef.current = setInterval(() => {
+      setTime(prev => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          endGame();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-  return () => clearInterval(timer); // limpiar si el componente se desmonta
-}, []); // 👈 importante: sin dependencias
+    return () => clearInterval(timerRef.current);
+  }, [endGame]);
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
     setAnimarClick(true);
     setTimeout(() => setAnimarClick(false), 150);
-
     setEmocionIndex(prev => (prev + 1) % emociones.length);
   };
 
   return (
     <div className="game-container">
-      {/* Estrellas permanentes */}
-      <Stars />
-
       <h2>Tiempo: {time}s</h2>
       <h3>Ticks: {score}</h3>
 
@@ -64,24 +60,18 @@ function Game({ score, setScore, endGame }) {
             width: `${(time / 10) * 100}%`,
             backgroundColor:
               time > 6 ? '#4caf50' : time > 3 ? '#ffc107' : '#f44336',
+            transition: 'width 0.5s ease'
           }}
         ></div>
       </div>
 
-      {/* Contenedor de los GIFs (todos en DOM, se ocultan con display) */}
-      <div className="gato-wrapper" onClick={handleRascar}>
-        {emociones.map((src, i) => (
-          <motion.img
-            key={i}
-            src={src}
-            alt={`gato-${i}`}
-            className="gato-img"
-            style={{ display: emocionIndex === i ? 'block' : 'none' }}
-            animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-          />
-        ))}
-      </div>
+      <img
+        src={`${emociones[emocionIndex]}?v=${Date.now()}`}
+        alt="gato"
+        className="gato-img"
+        onClick={handleRascar}
+        style={{ transform: animarClick ? 'scale(0.9)' : 'scale(1)', transition: 'transform 0.2s ease' }}
+      />
     </div>
   );
 }
