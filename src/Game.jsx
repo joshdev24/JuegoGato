@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
 import Loader from './Loader';
+import './style.css';
+
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
