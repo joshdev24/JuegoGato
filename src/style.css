@@ -188,3 +188,55 @@ button:hover {
   transition: width 1s linear, background-color 0.3s ease;
   border-radius: 10px;
 }
+
+@media (max-width: 600px) {
+  .app {
+    padding: 1rem;
+    margin-top: 100px;
+  }
+
+  .gato-img {
+    width: 180px;
+  }
+
+  .gato-wrapper {
+    width: 180px;
+  }
+
+  .start-btn, 
+  .result-container button,
+  button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .mensaje-gato {
+    font-size: 1rem;
+  }
+
+  .gato-saludo {
+    width: 140px;
+  }
+
+  .barra-tiempo-container {
+    width: 80%;
+    height: 12px;
+  }
+
+  .gatos-finales {
+    gap: 10px;
+  }
+
+  .gato-aparece {
+    width: 80px;
+  }
+
+  .inicio {
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .game-container {
+    padding: 0 1rem;
+  }
+}
