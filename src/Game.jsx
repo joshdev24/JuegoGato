@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Stars from './Stars';
+import Loader from './Loader';
 
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
@@ -60,8 +61,8 @@ function Game({ score, setScore, endGame }) {
   return (
     <div className="game-container">
       <Stars />
-      <h2>Tiempo: {time}s</h2>
-      <h3>Ticks: {score}</h3>
+      <Loader time={time}/>
+      <h3>Clicks: {score}</h3>
       <div className="barra-tiempo-container">
         <div
           className="barra-tiempo"

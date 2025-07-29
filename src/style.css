@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS:wght@700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 
 .app {
   text-align: center;
-  font-family: 'Comic Sans MS', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   padding: 2rem;
   margin-top: 200px;
 }
@@ -177,16 +179,58 @@ button:hover {
 .barra-tiempo-container {
   width: 30%;
   height: 15px;
-  background-color: #eee;
-  border-radius: 10px;
+  background: linear-gradient(90deg, #111, #222);
+  border-radius: 12px;
   margin: 1rem auto;
   overflow: hidden;
+  box-shadow:
+    0 0 10px #0f0,
+    inset 0 0 15px #0f0;
+  position: relative;
 }
 
 .barra-tiempo {
   height: 100%;
+  border-radius: 12px;
   transition: width 1s linear, background-color 0.3s ease;
-  border-radius: 10px;
+  position: relative;
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  animation: glowMove 2.5s linear infinite;
+  box-shadow: inset 0 0 15px;
+}
+
+/* Verde */
+.barra-tiempo.verde {
+  background-image: linear-gradient(270deg, #4caf50, #66bb6a, #4caf50);
+  box-shadow:
+    0 0 8px #4caf50,
+    inset 0 0 15px #388e3c;
+}
+
+/* Amarillo */
+.barra-tiempo.amarillo {
+  background-image: linear-gradient(270deg, #ffc107, #ffca28, #ffc107);
+  box-shadow:
+    0 0 8px #ffc107,
+    inset 0 0 15px #ffa000;
+}
+
+/* Rojo */
+.barra-tiempo.rojo {
+  background-image: linear-gradient(270deg, #f44336, #e57373, #f44336);
+  box-shadow:
+    0 0 8px #f44336,
+    inset 0 0 15px #d32f2f;
+}
+
+@keyframes glowMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 
 @media (max-width: 600px) {
@@ -240,3 +284,135 @@ button:hover {
     padding: 0 1rem;
   }
 }
+
+
+.ring-3 {
+  box-shadow: 0px 0px 10px 15px #fff;
+  border-radius: 50%;
+  padding: 2px;
+  position: relative; /* importante para control de z-index */
+  z-index: 10;
+}
+
+.ring-2 {
+  box-shadow: 0px 0px 2px 10px #000;
+  border-radius: 50%;
+  padding: 2px;
+  position: relative;
+  z-index: 10;
+}
+
+.ring-1 {
+  box-shadow: 0px 0px 10px 15px #fff;
+  border-radius: 50%;
+  padding: 2px;
+  position: relative;
+  z-index: 10;
+}
+
+.black-hole {
+  height: 128px;
+  aspect-ratio: 1;
+  background-color: black;
+  border-radius: 50%;
+  box-shadow:
+    0px 0px 20px 10px #000,
+    inset 0px 0px 10px #ffffff88;
+  position: relative; /* necesario para z-index */
+  z-index: 10;
+}
+
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 5%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  border-radius: 50%;
+  z-index: 5; /* menos que black-hole para quedar atrás */
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(75deg);
+  z-index: 20; /* mayor que black-hole para estar adelante */
+  pointer-events: none; /* para que no interfiera con clicks */
+}
+
+.crescent {
+  filter: drop-shadow(0px 0px 5px #fff) drop-shadow(0px 0px 15px #fff)
+    drop-shadow(0px 0px 25px #fff) drop-shadow(0px 0px 50px #fff);
+  position: absolute;
+  color: transparent;
+  top: 50%;
+  left: 50%;
+  transform: rotate(180deg);
+  width: 200px;
+  height: 12px;
+  clip-path: ellipse(60% 100% at 100% 50%);
+  offset-path: path("M 0,-100 A 100,100 0 1,1 0,100 A 100,100 0 1,1 0,-100 Z");
+  offset-distance: 0%;
+  opacity: 0;
+}
+
+.crescent-1 {
+  animation: moveOval 500ms ease-in-out 0ms infinite;
+}
+.crescent-2 {
+  animation: moveOval 500ms ease-in-out 83ms infinite;
+}
+.crescent-3 {
+  animation: moveOval 500ms ease-in-out 167ms infinite;
+}
+.crescent-4 {
+  animation: moveOval 500ms ease-in-out 250ms infinite;
+}
+.crescent-5 {
+  animation: moveOval 500ms ease-in-out 333ms infinite;
+}
+.crescent-6 {
+  animation: moveOval 500ms ease-in-out 417ms infinite;
+}
+
+@keyframes moveOval {
+  18% {
+    offset-distance: 25%;
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 90%;
+    opacity: 0;
+  }
+}
+
+.timer-inside-hole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  z-index: 30; /* arriba de todo */
+  transition: color 0.3s, transform 0.3s;
+}
+
+
+
+
+
