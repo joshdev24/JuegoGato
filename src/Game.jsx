@@ -4,14 +4,16 @@ import Stars from './Stars';
 import Loader from './Loader';
 import './style.css';
 
-
 function Game({ score, setScore, endGame }) {
   const [time, setTime] = useState(10);
-  const timeRef = useRef(10);          // guarda el tiempo restante real
-  const timerRef = useRef(null);       // referencia al interval
-  const endGameRef = useRef(endGame);  // guarda referencia a la función endGame
-  const [animarClick, setAnimarClick] = useState(false);
   const [emocionIndex, setEmocionIndex] = useState(0);
+  const [animarClick, setAnimarClick] = useState(false);
+
+  const timeRef = useRef(10);
+  const timerRef = useRef(null);
+  const endGameRef = useRef(endGame);
+  const emocionIndexRef = useRef(0);
+  const animating = useRef(false);
 
   const emociones = [
     '/assets/gato_relajado.gif',
@@ -24,12 +26,10 @@ function Game({ score, setScore, endGame }) {
     '/assets/gato_furioso.gif',
   ];
 
-  // Actualiza la referencia si endGame cambia (pero no reinicia timer)
   useEffect(() => {
     endGameRef.current = endGame;
   }, [endGame]);
 
-  // Precarga GIFs
   useEffect(() => {
     emociones.forEach(src => {
       const img = new Image();
@@ -37,7 +37,6 @@ function Game({ score, setScore, endGame }) {
     });
   }, []);
 
-  // Timer que corre una sola vez
   useEffect(() => {
     timerRef.current = setInterval(() => {
       if (timeRef.current <= 1) {
@@ -55,16 +54,28 @@ function Game({ score, setScore, endGame }) {
 
   const handleRascar = () => {
     setScore(prev => prev + 1);
-    setAnimarClick(true);
-    setTimeout(() => setAnimarClick(false), 150);
-    setEmocionIndex(prev => (prev + 1) % emociones.length);
+
+    // Solo trigger la animación si no está activa
+    if (!animating.current) {
+      animating.current = true;
+      setAnimarClick(true);
+      setTimeout(() => {
+        setAnimarClick(false);
+        animating.current = false;
+      }, 100); // más corto = menos bloqueo para jitter
+    }
+
+    // Actualizar emoción sin provocar render múltiple
+    emocionIndexRef.current = (emocionIndexRef.current + 1) % emociones.length;
+    setEmocionIndex(emocionIndexRef.current);
   };
 
   return (
     <div className="game-container">
       <Stars />
-      <Loader time={time}/>
+      <Loader time={time} />
       <h3>Clicks: {score}</h3>
+
       <div className="barra-tiempo-container">
         <div
           className="barra-tiempo"
@@ -85,7 +96,7 @@ function Game({ score, setScore, endGame }) {
             className="gato-img"
             style={{ display: emocionIndex === i ? 'block' : 'none' }}
             animate={animarClick ? { scale: 0.9 } : { scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 500 }}
           />
         ))}
       </div>
@@ -94,3 +105,4 @@ function Game({ score, setScore, endGame }) {
 }
 
 export default Game;
+
